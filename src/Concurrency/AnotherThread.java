@@ -1,6 +1,6 @@
 package Concurrency;
 
-import static Concurrency.ThreadColor.ANSI_BLUE;
+import static Concurrency.Misc.ThreadColor.ANSI_BLUE;
 
 public class AnotherThread extends Thread {
 

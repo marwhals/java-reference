@@ -1,4 +1,4 @@
-package Concurrency;
+package Concurrency.Misc;
 
 public enum ThreadColor {
 
