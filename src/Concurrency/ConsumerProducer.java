@@ -1,7 +1,14 @@
 package Concurrency;
 
 import java.util.Random;
+/*
+- Deadlock example - one task can't make progress because another task will not release the lock on a shared resource
 
+The wait, notify and notifyAll methods
+- Belongs to the object class and are used to monitor lock situations to prevent threads blocking indefinitely
+- Because they are on object, any instance of any class can execute these methods from within a synchrnoised method/ statement
+
+ */
 class MessageRepository {
 
     private String message;
@@ -10,18 +17,28 @@ class MessageRepository {
     public synchronized String read() {
 
         while (!hasMessage) {
-
+            try {
+                wait(); //deadlock fix -- thread will sleep until it recieves a notify or notifyAll from some other thread
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         hasMessage = false;
+        notifyAll();// deadlock fix
         return message;
     }
 
     public synchronized void write(String message) {
 
         while (hasMessage) {
-
+            try {
+                wait();// deadlock fix
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         hasMessage = true;
+        notifyAll(); //deadlock fix
         this.message = message;
     }
 }
