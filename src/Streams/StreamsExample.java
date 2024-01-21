@@ -5,6 +5,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/*
+- Streams are lazy - only evaluated when a terminal method is called on it
+- Streams are optimized for best performance - they may not execute the operations in the order specified
+----- NOTE - avoid side effects in intermediate operations - they may not be executed at all
+
+- Can't reuse a stream after the terminal operation has been invoked - if you want to do something similar you need to setup a new pipeline
+ */
+
 public class StreamsExample {
 
     public static void main(String[] args) {
@@ -50,7 +58,7 @@ public class StreamsExample {
                 .filter(s -> s.indexOf('G') == 0 || s.indexOf("O") == 0)
                 .map(s -> s.charAt(0) + "-" + s.substring(1))
                 .sorted()
-                .forEach(s -> System.out.print(s + " "));
+                .forEach(s -> System.out.print(s + " ")); //Stream pipeline ending terminal operation - everything before it is a intermediate operation
 
         System.out.println("\n----------------------------------");
 
