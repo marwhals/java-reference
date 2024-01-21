@@ -1,9 +1,10 @@
 package Concurrency;
 
 import Concurrency.Misc.ThreadColor;
+
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.Executors;
 
 /* Executor service
     - These are the ExecutorService classes and they exist to manage the creation and execution of threads
@@ -28,36 +29,85 @@ import java.util.concurrent.Executors;
    Advantages of using an executor service
    - The job of managing threads is simplified
    - Focus on tasks which need to be run and not thread management
+
+   Creating threads is expensive
+   - Creating threads, destroying threads and then creating them again can be expensive
+   - A thread pool mitigates the cost, by keeping a set of threads around, in a pool for current and future work
+   - Threads once they complete one task can then be reassgined to another task withouth the expense of destroying the thread and creating a new one
+
+   Mechanics of a thread pool
+   - A thread pool consists of three components
+   -- Worker threads are available in a pool to execute tasks. They're pre created and kept alive through the lifetime of the application
+   -- Submitted tasks are placed in a first-in first-out queue. Threads pop from the queue and execute them so they're executred in the order they're submitted
+   -- The thread pool manager allocates tasks to threads and ensures proper thread pool synchronisation.
+
+   Variations of the thread pool
+   - FixedThreadPool - Has a fixed number of threads
+   - CachedThreadPool - Creates new threads as needed so its a variable size pool
+   - ScheduledThreadPool - Can schedule tasks to run at a specific time or repeatedly at regular intervals
+   - WorkStealingPool - Uses a work stealing algorithm to distributre tasks among the threads in the pool
+   - ForkJoinPool - Specialised WorkStealingPool for executing ForkJoinTasks
+
  */
 
-class ColorThreadFactory implements ThreadFactory {
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+
+class ColorThreadFactoryTwo implements ThreadFactory {
 
     private String threadName;
 
-    public ColorThreadFactory(ThreadColor color) {
-        this.threadName = "Thread " + color.name();
+    private int colorValue = 1;
+
+    public ColorThreadFactoryTwo(ThreadColor color) {
+        this.threadName = color.name();
+    }
+
+    public ColorThreadFactoryTwo() {
     }
 
     @Override
     public Thread newThread(Runnable r) {
 
         Thread thread = new Thread(r);
-        thread.setName(threadName);
+        String name = threadName;
+        if (name == null) {
+            name = ThreadColor.values()[colorValue].name();
+        }
+
+        if (++colorValue > (ThreadColor.values().length - 1)) {
+            colorValue = 1;
+        }
+        thread.setName(name);
         return thread;
     }
 }
 
-public class ExecutorsLesson {
+public class ExecutorLessonTwo {
+
     public static void main(String[] args) {
+
+        int count = 50;
+        var multiExecutor = Executors.newFixedThreadPool(
+                5, new ColorThreadFactoryTwo()
+        );
+
+        for (int i = 0; i < count; i++) {
+            multiExecutor.execute(ExecutorLessonTwo::countDown);
+        }
+        multiExecutor.shutdown();
+    }
+
+    public static void singlemain(String[] args) {
 
         var blueExecutor = Executors.newSingleThreadExecutor(
                 new ColorThreadFactory(ThreadColor.ANSI_BLUE)
         );
-        blueExecutor.execute(ExecutorsLesson::countDown);
+        blueExecutor.execute(ExecutorLessonTwo::countDown);
         blueExecutor.shutdown();
 
         boolean isDone = false;
-
         try {
             isDone = blueExecutor.awaitTermination(500, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
@@ -69,7 +119,7 @@ public class ExecutorsLesson {
             var yellowExecutor = Executors.newSingleThreadExecutor(
                     new ColorThreadFactory(ThreadColor.ANSI_YELLOW)
             );
-            yellowExecutor.execute(ExecutorsLesson::countDown);
+            yellowExecutor.execute(ExecutorLessonTwo::countDown);
             yellowExecutor.shutdown();
 
             try {
@@ -83,7 +133,7 @@ public class ExecutorsLesson {
                 var redExecutor = Executors.newSingleThreadExecutor(
                         new ColorThreadFactory(ThreadColor.ANSI_RED)
                 );
-                redExecutor.execute(ExecutorsLesson::countDown);
+                redExecutor.execute(ExecutorLessonTwo::countDown);
                 redExecutor.shutdown();
                 try {
                     isDone = redExecutor.awaitTermination(500, TimeUnit.MILLISECONDS);
@@ -100,13 +150,13 @@ public class ExecutorsLesson {
     public static void notmain(String[] args) {
 
         Thread blue = new Thread(
-                ExecutorsLesson::countDown, ThreadColor.ANSI_BLUE.name());
+                ExecutorLessonTwo::countDown, ThreadColor.ANSI_BLUE.name());
 
         Thread yellow = new Thread(
-                ExecutorsLesson::countDown, ThreadColor.ANSI_YELLOW.name());
+                ExecutorLessonTwo::countDown, ThreadColor.ANSI_YELLOW.name());
 
         Thread red = new Thread(
-                ExecutorsLesson::countDown, ThreadColor.ANSI_RED.name());
+                ExecutorLessonTwo::countDown, ThreadColor.ANSI_RED.name());
 
         blue.start();
 
@@ -134,6 +184,7 @@ public class ExecutorsLesson {
     }
 
     private static void countDown() {
+
         String threadName = Thread.currentThread().getName();
         var threadColor = ThreadColor.ANSI_RESET;
         try {
