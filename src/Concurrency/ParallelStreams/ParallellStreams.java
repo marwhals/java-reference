@@ -1,4 +1,4 @@
-package Concurrency;
+package Concurrency.ParallelStreams;
 
 import java.util.Arrays;
 import java.util.Random;

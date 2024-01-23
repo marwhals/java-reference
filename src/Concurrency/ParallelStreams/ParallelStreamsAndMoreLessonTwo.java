@@ -1,4 +1,4 @@
-package Concurrency;
+package Concurrency.ParallelStreams;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
