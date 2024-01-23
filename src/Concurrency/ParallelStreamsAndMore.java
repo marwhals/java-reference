@@ -29,9 +29,9 @@ record Person(String firstName, String lastName, int age) {
 public class ParallelStreamsAndMore {
     public static void main(String[] args) {
 
-        var persons = Stream.generate(Person::new)
+        var persons = Stream.generate(Concurrency.Misc.Person::new)
                 .limit(10)
-                .sorted(Comparator.comparing(Person::lastName))
+                .sorted(Comparator.comparing(Concurrency.Misc.Person::lastName))
                 .toArray();
 
         for (var person : persons) {
@@ -72,11 +72,11 @@ public class ParallelStreamsAndMore {
         System.out.println(joinWords);
 
         Map<String, Long> lastNameCounts =
-                Stream.generate(Person::new)
+                Stream.generate(Concurrency.Misc.Person::new)
                         .limit(10000)
                         .parallel() // usage requires thought
                         .collect(Collectors.groupingBy(
-                                Person::lastName,
+                                Concurrency.Misc.Person::lastName,
                                 Collectors.counting()
                         ));
 
