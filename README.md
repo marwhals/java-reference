@@ -1,3 +1,5 @@
 # java-udemy-masterclass
 
-Repo containing code from udemy Java masterclass course
+Repository containing example code snippets and notes.
+
+Based on the Java masterclass course on Udemy
