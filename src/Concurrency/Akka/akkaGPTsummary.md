@@ -23,9 +23,9 @@ A: S \times M \rightarrow S \times O
 $$
 
 Where:
-- \( S \) = **State** of the actor.
-- \( M \) = **Message** sent to the actor.
-- \( O \) = **Output** (response or message sent to another actor).
+-  $S$ = **State** of the actor.
+-  $M$ = **Message** sent to the actor.
+-  $O$ = **Output** (response or message sent to another actor).
 
 When an actor receives a message:
 - It may **change its internal state**.
@@ -45,8 +45,8 @@ Q = \{m_1, m_2, m_3, \dots, m_n\}
 $$
 
 Where:
-- \( Q \) = Queue representing the actor's mailbox.
-- \( m_i \) = Incoming messages.
+- $Q$ = Queue representing the actor's mailbox.
+- $m_i$ = Incoming messages.
 
 Actors process messages **sequentially**, but the queues allow **concurrent message dispatching** to multiple actors.
 
@@ -60,8 +60,8 @@ G = (V, E)
 $$
 
 Where:
-- \( V \) = Set of actors.
-- \( E \subseteq V \times V \) = Set of directed edges representing message passing between actors.
+- $V$ = Set of actors.
+- $E \subseteq V \times V$ = Set of directed edges representing message passing between actors.
 
 For example:
 - **Vertex** = Actor (computation unit).
@@ -96,9 +96,9 @@ f: D \rightarrow R
 $$
 
 Where:
-- \( D \) = Input data (divided into chunks).
-- \( f \) = Map function (processing actors).
-- \( R \) = Reduced result (collected output).
+- $D$ = Input data (divided into chunks).
+- $f$ = Map function (processing actors).
+- $R$ = Reduced result (collected output).
 
 Actors handle individual chunks of data concurrently and send their results to a **collector actor** that reduces the results into a final outcome.
 
@@ -112,8 +112,8 @@ G = (V, E)
 $$
 
 Where:
-- \( V \) = Processing stages (e.g., source, flow, sink).
-- \( E \) = Data flow edges.
+- $V$ = Processing stages (e.g., source, flow, sink).
+- $E$ = Data flow edges.
 
 Mathematically:
 - **Source:** A generator function \( f(x) \).
@@ -136,9 +136,9 @@ F: T \rightarrow R
 $$
 
 Where:
-- \( F \) = Future.
-- \( T \) = Time.
-- \( R \) = Result after asynchronous computation.
+- $F$ = Future.
+- $T$ = Time.
+- $R$ = Result after asynchronous computation.
 
 When multiple futures run concurrently:
 
