@@ -1,5 +1,3 @@
-# java-udemy-masterclass
+# java-reference
 
-Repository containing example code snippets and notes.
-
-Based on the Java masterclass course on Udemy
+This repo contains personal notes on the core Java language and some associated frameworks.
