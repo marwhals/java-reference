@@ -87,7 +87,7 @@
 
 - Java's array type is basic and has very little built in functionality
 - Has single property or field, named length
-- It inherits java.util.Objects functionlity
+- It inherits java.util.Objects functionality
 - Java provides a helper class named java.util.Array, providing the common functionlaity you would want for many
   operations
 - These are static methods on Array, they are class methods, not instance methods.
