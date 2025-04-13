@@ -45,20 +45,19 @@
 
 - Use the "Frames" tab to navigate between threads and frames of execution.
 - "Drop Frame" allows you to re-enter a method without restarting the entire debug session.
+- 
+## Assertions - Beyond the basics and Exception Handling
 
-## Advanced Debugging and Techniques: Stepping Watches and Control
-
-
-## Field Watchpoints, Debugging, Track Variable changes
-
-
-## Smart Step Into, Set Value and Third Party Source
-
-
-## Unit Testing Essentials and JUnit Framework in Java
-
-
-## Assertions - Essential Techniques for JUnit Testing
-
+1) assertNotEquals() - can use this instead of assertEquals()
+2) assertTrue() - verifies that the condition is true
+3) assertFalse() - verifies that the condition is false
+4) assertNull() - checks that the object is null
+5) assertNotNull() - checks that the object is not null
+6) assertArrayEquals() - checks if two arrays are equal (*content wise* not object reference wise)
+7) assertThrows() - asserts that a specific exception is thrown
+8) assertSame() - verifies that two objects refer to the same object
+9) assertNotSame() - verifies that two objects do not refer to the same object
+10) assertEquals() - checks whether two values are equal
+11) assertThat() -allows you to define custom matching rules (e.g., using Hamcrest matchers) for improved readability and custom assertions. I.e match a range of values.
 
 ## Parameterised Unit Tests - Data Driven Testing in JUnit
