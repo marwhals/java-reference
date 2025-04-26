@@ -85,6 +85,18 @@ These notes are to provide a starting point for more advanced topics relating to
 ---
 
 # Using other JVM Languages
+### Kotlin vs Java - Kotlin doesn't have any primitives
+- Object types have to be used
+  - These will become byte code anyway
+  - Var vs Val - Just a design time constraint
+  - Variables can never be `NULL`
+
+*Can use javap file to see the differences in byte code*
+
+*See Oracle Docs*
+
+### Can disassemble bytecode back into Java
+Example tool - CFR
 
 ---
 
