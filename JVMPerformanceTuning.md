@@ -82,6 +82,21 @@ These notes are to provide a starting point for more advanced topics relating to
 
 # GraalVM
 
+- Alternative to the standard JVM which should provide better performance and more.
+  - Only for Linux and Mac
+- Some features are already available in the standard JDK
+
+## About the GraalVM
+- Faster than the standard JVM for running java byte code
+- Provides an alternative Java compiler and this might produce more performant byte code
+- ‼ Can use GraalVM to natively compile Java code to software that will run natively on a given computer
+  - Means you don't need to install a JVM to run the code -> result: code will run faster
+  - run `native-image` command to compile
+- **Out of date** Using the Graal Compiler with OpenJDK11 on Linux
+  - `XX:+UnlockExperimentalVMOptions`
+  - `XX:+EnableJVMCI`
+  - `XX:+UseJVMCICompiler`
+
 ---
 
 # Using other JVM Languages
