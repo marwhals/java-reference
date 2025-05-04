@@ -158,6 +158,33 @@ Three parts: Stack, Heap and Metaspace
 
 # The Metaspace and Internal JVM memory optimisations
 
+## The role of the Metaspace
+- Used to store metadata
+  - This information is used to primarily store information about classes, methods like which methods have been compiled into bytecode and which have been compiled into native code.
+  - It is also where Static variables are stored
+    - Can think of the meta space as having the same role as the stack for any object or any variable that we declare a static variable
+    - Static primitives are stored entirely in the meta space and static objects are stored on the heap, but with the object pointer or reference held in the meta space
+      - Variables in the meta space are permanently there and never reach a state where they can be garbage collected
+    - All classes and all threads have access to within a Java program have access to the meta space. Hence the same for static variables
+    - Public and private refer to data than can be seen outside of a class
+
+## The PermGen
+*Java 7 specific*
+
+## Are objects always created on the heap?
+- Java heap scope is managed by brackets/code blocks
+- All objects go on the heap in Java
+- An object that is not shared...i.e only exists in that code block will actually be placed on the Stack via JVM optimisations
+- 
+## The String Pool
+- String are immutable, same strings will have the same references despite being seen as two different objects
+- This won't work for calculated Strings
+  - Virtual machine can detect these things, string deduplication. See the underlying value and remove one of them.
+
+## Interning Strings
+- Placing strings in the string pool `String abc = someOtherObjectInstance.toString().intern()`
+  - Only calculated strings and very long string will not be placed in the string pool, otherwise it is usually automatic
+
 ---
 
 # Tuning the JVM's memory settings
