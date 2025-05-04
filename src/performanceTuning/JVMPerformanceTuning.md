@@ -60,42 +60,91 @@ java -XX:+PrintCompilation *.JITDemo
 ```
 
 ### C1 and C2 compilers, logging the compilation activity
+
 - C1 compiler does the first three levels of compilation
 - C2 does more advanced compilation
-- Virtual machine decides which level of compilation to apply to a particular block of code based on how often it is being run and how complex or time consuming it is.
-  - Referred to as profiling the code
-    - C2 code is even more optimised than C1 code
+- Virtual machine decides which level of compilation to apply to a particular block of code based on how often it is
+  being run and how complex or time consuming it is.
+    - Referred to as profiling the code
+        - C2 code is even more optimised than C1 code
 - Only frequently used code is optimised
-  - If the code doesn't perform anything complex than there may be no performance benefit
-  - JVM can also place code in the *code cache*
+    - If the code doesn't perform anything complex than there may be no performance benefit
+    - JVM can also place code in the *code cache*
 - `java -XX:+UnlockDiagnosticVMOptions -XX:+LogCompilation ....`
 
 ### Tuning the code cache size
-- C2 compiled code may be placed in the code cache for improved performance.....cache is limited size...swapping can occur
-  - If cache is full, application console may produce this error `VM warning CodeCache is full. Compiler has been disabled`
-  - Can use `-XX:+PrintCodeCache` to find out about size of the code cache
-- In more complex applications, if the size of the used memory is getting close to the size of the code cache then a tweaked code cache might be helpful
-  - Maximum size of code cache is dependent on the version of Java you are using
+
+- C2 compiled code may be placed in the code cache for improved performance.....cache is limited size...swapping can
+  occur
+    - If cache is full, application console may produce this error
+      `VM warning CodeCache is full. Compiler has been disabled`
+    - Can use `-XX:+PrintCodeCache` to find out about size of the code cache
+- In more complex applications, if the size of the used memory is getting close to the size of the code cache then a
+  tweaked code cache might be helpful
+    - Maximum size of code cache is dependent on the version of Java you are using
 - Changing the code cache size
-  - `InitialCodeCacheSize` - size when application starts
-  - `ReservedCodeCacheSize`- maximum size of the code cache, how much it grow to if needed
-  - `CodeCacheExpansionSize` - dictates how quickly the code cache should grow as it becomes populated
-  - Example: `java -XX:ReservedCodeCacheSize=32g/k/m`
+    - `InitialCodeCacheSize` - size when application starts
+    - `ReservedCodeCacheSize`- maximum size of the code cache, how much it grow to if needed
+    - `CodeCacheExpansionSize` - dictates how quickly the code cache should grow as it becomes populated
+    - Example: `java -XX:ReservedCodeCacheSize=32g/k/m`
 
 ### Remotely monitoring the code cache with **JConsole**
+
 - Can cause extra overhead and use extra memory of the code cache
-
-
 
 ---
 
 # Selecting the JVM
 
+## When downloading a JVM there is a choice of 32 Bit and 64 Bit JVM
+
+| 32 Bit                        | 64 Bit                                                               |
+|-------------------------------|----------------------------------------------------------------------|
+| Might be faster if heap < 3GB | Might be faster if using longs and doubles                           |
+| Max heap size = 4GB           | Required if heap is > than 4GB                                       |
+|                               | Max heap size is OS dependent                                        |
+| Client compiler only          | Client and server compilers                                          |
+|                               | Use client compiler only`-client`. Ignored on some operating systems |
+|                               | Use 32bit server compiler only`-server`.                             |
+|                               | Use 64bit server compiler only`-d64`.                                |
+
+- 32GB doesn't include the C1 and C2 compiler only C compiler
+- Consider C1 and C2 as Client vs Server in terms of what the application is going to do.
+- For short lived applications that have low memory requirements 32 bit JVM may perform better
+
+## Turning of tiered compilation
+`-XX:-TieredCompilation`
+
+## Tuning native compilation within the Virtual Machine
+- Can find out the value of all flags using `java -XX:+PrintFlagsFinal`
+- get java process id `jps`
+- `jinfo -flag CICompilerCount`
+- `jinfo -flag CompileThreshold`
+- `-XX:CICompilerCount=n` For larger applications increasing the number of threads doing the compiling may make a difference
+- `-XX:CompileThreshold=n` - the number of times a method needs to run before being natively compiled
+
+## Java Memory
+
+Three parts: Stack, Heap and Metaspace
+
+### The Stack
+- Every thread has its own stack
+- Managed by the JVM
+- JVM knows when data on the stack can be destroyed
+- Stack data can only be seen by the thread that owns that stack
+- Can only store simple data types
+
+### The heap
+- Data on the heap can be accessed by multiple threads if programmed that way
+- Used for objects
+- Java Memory Rules
+  - Objects are stored on the heap
+  - Variables are a reference to the object
+  - Local variables are stored on the stack
+
 ---
 
 # How memory works - the stack and the heap
-
-
 
 ---
 
@@ -166,34 +215,38 @@ java -XX:+PrintCompilation *.JITDemo
 # GraalVM
 
 - Alternative to the standard JVM which should provide better performance and more.
-  - Only for Linux and Mac
+    - Only for Linux and Mac
 - Some features are already available in the standard JDK
 
 ## About the GraalVM
+
 - Faster than the standard JVM for running java byte code
 - Provides an alternative Java compiler and this might produce more performant byte code
 - ‼ Can use GraalVM to natively compile Java code to software that will run natively on a given computer
-  - Means you don't need to install a JVM to run the code -> result: code will run faster
-  - run `native-image` command to compile
+    - Means you don't need to install a JVM to run the code -> result: code will run faster
+    - run `native-image` command to compile
 - **Out of date** Using the Graal Compiler with OpenJDK11 on Linux
-  - `XX:+UnlockExperimentalVMOptions`
-  - `XX:+EnableJVMCI`
-  - `XX:+UseJVMCICompiler`
+    - `XX:+UnlockExperimentalVMOptions`
+    - `XX:+EnableJVMCI`
+    - `XX:+UseJVMCICompiler`
 
 ---
 
 # Using other JVM Languages
+
 ### Kotlin vs Java - Kotlin doesn't have any primitives
+
 - Object types have to be used
-  - These will become byte code anyway
-  - Var vs Val - Just a design time constraint
-  - Variables can never be `NULL`
+    - These will become byte code anyway
+    - Var vs Val - Just a design time constraint
+    - Variables can never be `NULL`
 
 *Can use javap file to see the differences in byte code*
 
 *See Oracle Docs*
 
 ### Can disassemble bytecode back into Java
+
 Example tool - CFR
 
 ---
