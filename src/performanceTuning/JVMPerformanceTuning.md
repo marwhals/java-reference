@@ -189,6 +189,33 @@ Three parts: Stack, Heap and Metaspace
 
 # Tuning the JVM's memory settings
 
+## How the string pool is implemented
+- Implemented using a HashMap
+  - 16 Buckets. String is hashed and then placed in one of these buckets
+    - Two identical objects will always have the same hashcode
+
+## Understanding the size and density of the string pool
+- Can use `-XX:+PrintStringTableStatistics`
+- Important to be away for the density of the String pool for larger applications
+
+## Tuning the size of the string pool
+- `-XX:StringTableSize=(use a prime here)` -use a prime number for efficiency
+  - If the average bucket size is 40+ it may be worth changing this
+
+## Tuning the size of the heap
+- Must be big enough to store the string pool
+- When dealing without of memory errors don't just increase the max heap size....actual issue is probably a memory leak
+  - May be worth right sizing the heap when given prior knowledge
+
+## Shortcut syntax for heap tuning flags
+-XX:+PrintStringTableStatistics
+-XX:StringTableSize=n
+-XX:MaxHeapSize=n -Xmx
+-XX:InitialHeapSize=n -Xms
+-XX:+UnlockDiagnosticVMOptions
+-XX:+PrintFlagsFinal
+
+
 ---
 
 # Introducing Garbage Collection
