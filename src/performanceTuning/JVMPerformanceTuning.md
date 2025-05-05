@@ -313,6 +313,32 @@ Three parts: Stack, Heap and Metaspace
 
 # Other Coding Choices
 
+## How comparisons are done
+- Easiest changes to make that can impact code performance
+  - Primitives vs Objects
+  - BigDecimal vs Double
+  - StringBuilder vs Concatenating Strings
+  - Loops vs Streams
+
+## Comparing primitives with objects
+- Primitves
+
+## Comparing BigDecimals with Doubles
+- Doubles
+
+## Using the StringBuilder
+- String bulder stores strings as an array of bytes
+
+- StringBuilder
+  - JVM may do automatic optimisations for multiple concatenations
+
+## Comparing loops and streams
+
+- Loops *generally*, area for testing
+
+## A note on logging
+- Makesure logging is set up properly and don't over log if CPU is of concern
+
 ---
 
 # GraalVM
