@@ -310,8 +310,14 @@ Three parts: Stack, Heap and Metaspace
 # Analysing a heap dump
 
 ## Generating a heap dump
+- Can be done via VisualVM
+- Alternatively, you can use the following command line argument to enable and generate heap dumps automatically when an
+  OutOfMemoryError occurs:
+  `-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/path/to/dump/directory`
+  - Replace `/path/to/dump/directory` with the desired directory for storing the heap dump file.
 
 ## Viewing a heap dump
+- Requires tools like Eclipse MAT
 
 ---
 
