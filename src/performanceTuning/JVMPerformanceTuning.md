@@ -296,8 +296,10 @@ Three parts: Stack, Heap and Metaspace
 # Monitoring the Heap
 
 ## What is a soft leak
+- When an object remains referenced when no longer needed
 
 ## Into to VisualVM
+- Allows for viewing the stack and heap
 
 ## Monitoring the size of your heap over time
 
