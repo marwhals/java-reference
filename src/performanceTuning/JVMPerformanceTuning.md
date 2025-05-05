@@ -146,13 +146,45 @@ Three parts: Stack, Heap and Metaspace
 
 # How memory works - the stack and the heap
 
+## The structure of Java's memory
+
+## How the stack works
+
+## How the heap works
+
+## The heap and stack together - Example
+
 ---
 
 # Passing objects between methods
 
+## Passing by value
+
+## Passing by reference
+
+## Passing objects into methods
+
+## Final keyword and why it is not the same as a constant
+
+## Why the final keyword doesn't stop an objects values from being changed
+
 ---
 
 # Escaping References
+
+## What is an escaping reference
+
+## Strategy 1 - Using an iterator
+
+## Strategy 2 - Duplicating collections
+
+## Strategy 3 - Using immutable collections
+
+## Strategy 4 - Duplicating objects
+
+## Strategy 5 - Using interfaces to create immutable objects
+
+## Strategy 6 - Using modules to hide the implementation
 
 ---
 
@@ -263,25 +295,98 @@ Three parts: Stack, Heap and Metaspace
 
 # Monitoring the Heap
 
+## What is a soft leak
+
+## Into to VisualVM
+
+## Monitoring the size of your heap over time
+
+## Fixing the problem and check the heap size
+
 ---
 
 # Analysing a heap dump
+
+## Generating a heap dump
+
+## Viewing a heap dump
 
 ---
 
 # Generational Garbage Collection
 
+## How the garbage collector works out what is garbage
+
+## Why the heap is divided into generations
+
+## The internals of the Young Generation
+
+## Viewing the generations in VisualVM
+
+## Viewing the heap when there's a soft leak
+
 ---
 
 # Garbage Collector tuning and selection
+
+## Monitoring Garbage Collections
+
+## Turning off automated heap allocation sizing
+
+## Tuning garbage collection - Old and young allocation
+
+## Tuning garbage collection - survivor space allocation
+
+## Tuning garbage collection - generations needed to become old
+
+## Selecting a garbage collector
+
+## The G1 garbage collector
+
+## Tuning the G1 garbage collector
+
+## String de-duplication
 
 ---
 
 # Using a profiler to analyse application performance
 
+## Java Mission Control (JMC)
+
+## Building the JMC binaries
+
+## Running JMC and connecting to a VM
+
+## Customising the overview tab
+
+## The MBean browser tab
+
+## System, Memory and Diagnostic Commands tabs
+
+## Example
+
+## Using the flight recorder
+
+## Analysing a flight recording
+
+## Improving the application
+
+
 ---
 
 # Assessing Performance
+
+## Why bench marking isn't straight forward
+
+## Setting up the code for benchmarking
+
+## A simple approach to micro-benchmarking
+
+## Adding in a warm-up period
+
+## Comparing two code alternatives
+
+## Using Macro-benchmarking
 
 ---
 
@@ -305,6 +410,10 @@ Three parts: Stack, Heap and Metaspace
 
 # How Lists Work
 
+## Importance
+
+## The 8 different list implementations
+
 ---
 
 # How Maps Work
@@ -321,7 +430,7 @@ Three parts: Stack, Heap and Metaspace
   - Loops vs Streams
 
 ## Comparing primitives with objects
-- Primitves
+- Primitives
 
 ## Comparing BigDecimals with Doubles
 - Doubles
