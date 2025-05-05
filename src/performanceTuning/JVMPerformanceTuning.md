@@ -220,6 +220,45 @@ Three parts: Stack, Heap and Metaspace
 
 # Introducing Garbage Collection
 
+## What is meant by Java being garbage collected languages
+- Java works out when objects are no longer needed 🌳🌳🌳🌳
+  - Avoids **memory leaks 🧨**
+- Memory leaks *shouldn't* be possible in Java 
+  - If it does happen more than likely not the fault of the Java programmer
+- Garbage collection also avoid memory leaks. Idea comes from Lisp, Java made it popular
+- Automatic process will analyse the heap and work out which objects are no longer needed
+
+## How Java knows which objects can be removed from the heap
+
+- Any object on the heap which cannot be reached through a reference from the stack is "eligible for garbage collection"
+    - References from the metaspace will also never be deleted
+## The `system.gc()` method
+
+- See JavaDocs
+  - Its a suggestion to the VM not a command
+
+## 🧂 Java 11s Garbage Collector can give unused memory back to the operating system
+- Consider garbage collection algorithms
+- Java 8 doesn't do this 🧨🧨🧨
+
+## Why it's not a good idea to run the `System.gc()` method
+
+- Garbage collection process is using up system resources so it can slow down or even temporarily halt the running of the main application while garbage collection runs.
+  - Ideally want it to run in the most efficient way possible
+  - Generally better to let the virtual machine decide
+  - Could be used to check the performance of a block of code by running GC before it is executed. Still may be a bad idea
+
+## The `finalize()` method
+- This is run when the object is removed from the heap
+  - Deprecated from Java 9
+  - Don't use it
+    - Don't put clean up code in it
+    - Don't know if it is going to run or if it will ever run
+    - **See docs for more info**
+  - At the end of the program the JVM may not perform a GC. It will just destroy all the objects on the heap
+
+## The danger of using `finalize()`
+
 ---
 
 # Monitoring the Heap
