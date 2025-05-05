@@ -287,9 +287,19 @@ Three parts: Stack, Heap and Metaspace
 
 # Benchmarking with JMH
 
----
+## Installing the JMH benchmarking tool - Java Microbenchmark
+- See docs
+- Take care of the "warm up part"
+- Analyses performance in a more production like environment
+  - Will run code 1000s of times to produce a summary. JMH generally takes care of the stats
 
-# Performance and Benchmarking Exercise
+
+## Create and running benchmarks
+- Use `@Benchmark` annotation
+  - Normal for these things to take a long time
+
+## Using different benchmark modes
+-- See docs / generate info with assistant
 
 ---
 
