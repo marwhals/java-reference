@@ -605,26 +605,60 @@ Note: Both are available from Java 8, in Java 9 default is mark sweep and in Jav
 # Using a profiler to analyse application performance
 
 ## Java Mission Control (JMC)
+- Use case is CPU usage too high, network or disk usage?
+  - Here we can use a profiler.
+  - A separate application which can connect to out Java Virtual Machine and extract data for us to review.
+  - The need to attach to the running JVM and can add additional overhead
+    - Can lead to adverse performance while the profiler is attached.
+    - Unavoidable
+- Profiler options
+  - Some are paid for
+  - Open source: Java Mission Control integrated into Oracle JDK from Java 7
+    - 
+  - Can be compiled yourself
 
 ## Building the JMC binaries
+- Add if needed
 
 ## Running JMC and connecting to a VM
+- Generate instructions here
+
+- See docs for depth
 
 ## Customising the overview tab
+- Resulting dashboard is customisable
 
 ## The MBean browser tab
+- Add different stats for viewing
 
 ## System, Memory and Diagnostic Commands tabs
+- Info on tabs inside Java Mission Control
 
 ## Example
+- Example project / generate my own 🎼
+  - Worth giving threads names in multithreaded applications if possible (Scala???)
+- Spotting a memory leak. After garbage collection memory isn't freed.
+  - May need to let GC run a few times. JMC will help identify memory strain.
+  - Can check for blocked threads
 
-## Using the flight recorder
+## Using the flight recorder 
+- Separate mode.
+  - Can be used to record various metrics from a JVM and use JMC to view those metrics. Similar to an airplane blackbox, used to investigate.
+  - Does not provide live info. Either application has run or data is slightly behind.
+  - A flight recording is actually a JVM function. JMC allows for analysis
+    - Can specify via a command line argument or use JMC
+    - Flag: `-XX:FlightRecorder` - continuous option is very useful for a production system
+      - Can choose different levels of profiling. More profiling causes more overheads
+
+
+- For more detailed information on Java Mission Control (JMC), refer to
+  the [official documentation](https://docs.oracle.com/en/java/javase/11/jmc.html).
 
 ## Analysing a flight recording
+- See chart
 
 ## Improving the application
-
-
+- Generate example
 ---
 
 # Assessing Performance
