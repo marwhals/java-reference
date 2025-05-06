@@ -247,7 +247,6 @@ Three parts: Stack, Heap and Metaspace
 -XX:+UnlockDiagnosticVMOptions
 -XX:+PrintFlagsFinal
 
-
 ---
 
 # Introducing Garbage Collection
@@ -267,7 +266,7 @@ Three parts: Stack, Heap and Metaspace
 ## The `system.gc()` method
 
 - See JavaDocs
-  - Its a suggestion to the VM not a command
+  - It's a suggestion to the VM not a command
 
 ## 🧂 Java 11s Garbage Collector can give unused memory back to the operating system
 - Consider garbage collection algorithms
@@ -500,22 +499,106 @@ end
 # Garbage Collector tuning and selection
 
 ## Monitoring Garbage Collections
+- For Java 8 --- `-verbose:gc`
+  - GC - *minor GC*
+  - Full GC - *...*
 
 ## Turning off automated heap allocation sizing
+- Java dynamically alters the size of the heap at run time
+  - This can be turned off with `-XX:-UseAdaptiveSizePolicy` otherwise enabled by default
+  - Can use `jinfo` to check flags on an application
 
 ## Tuning garbage collection - Old and young allocation
+- Garbage collections that take place in the young generation are better for performance than garbage collections in the older generations
+  - Young generation garbage collections are quick and efficient
+- *Need to understand the behaviour of objects in an application*
+- Can resize different parts of the heap
+  - Less to young generation and more to old generation
+    - Result: more frequent garbage collections on the younger generation, older generation will grow more steadily
+- Can adjust the different thresholds
+- Tuning collection flags
+  - `-XX:NewRatio=n` example - if set to 4 than the old generation will be four times larger than the younger generation. Default is two, can be set to one.
+  - 
 
 ## Tuning garbage collection - survivor space allocation
+- `XX:SurvivorRation=n` - how much of the younger generation should be taken up by the survivor spaces
+  - Example 8 would mean the size of the eden space will be eight times larger than one survivor space.
 
 ## Tuning garbage collection - generations needed to become old
+- `-XX:MaxTenuringThreshold=n` - max value is 15 - 16 and higher is treated as infinity i.e keep everything in the younger generation
+  - Infinity is a bad idea since half of your heap won't be used
 
 ## Selecting a garbage collector
+- Types of collector:
+  - Serial
+  - Parallel
+  - Mostly Concurrent
+- Number of threads is irrelevant. Multithreaded not threaded etc. Application will pause while the GC runs.
+  - Garbage collector will compete for CPU resources. Will run slower on lower CPU machines.
+
+- Serial Collector `-XX:+UseSerialGC`
+  - Uses a single thread. Usually not a good choice.
+    - Useful when the Java application performance is not the most important thing
+    - I.e when running other applications alongside the Java process.
+    - Use this when you want other applications to get the most access to CPU resources.
+    - Very useful for background tasks where you want the other application 
+
+- Parallel Collector will perform garbage collections on the young generation (minor collections) `-XX:+UseParallelGC`
+  - Will have multiple threads running or performing the garbage collection process.
+  - Useful if you have multiple processors on your computer or processors that can handle multiple threads (always a niche case 😃)
+  - Useful for larger data sets as well since it gives better performance than the serial collector
+  - Sometimes called the throughput collector
+  - *Usually* the default
+
+- Mostly Concurrent
+  - Closest thing you can get to real time garbage collector
+    - In practice this is not possible
+    - Still pauses when marking, continues while the sweep phase takes place.
+    - 
+  - Two types
+    - The Mark Sweep Collector `-XX:+UseConcMarkSweepGC0`
+    - G1 collector `-XX:+UseG1GC`
+
+Note: Both are available from Java 8, in Java 9 default is mark sweep and in Java 10 default is the *Improved* G1
 
 ## The G1 garbage collector
+- Heap is spit into regions, by default there are 2048
+- Some regions are allocated to different parts of the heap. Some will be allocated to Eden, s0,s1 and the old generation.
+  - Not all regions need to be allocated
+- When Java decides that a garbage collection is needed in the young generation, it looks at those regions allocated to the young generation.
+  - It does the garbage collection process, and then it can reallocate the number of regions allocated to each part of the young generation and give it what it thinks will be optimal performance.
+  - Example: The GC might decide some of the regions that have been previously allocated to the survivor spaces should now be allocated to the Eden space and it could add some of the unallocated regions to the Eden space for example.
+  - This happens every time a minor collection takes place.
+- When a full garbage collection takes place, the garbage collector will work out for each region in the old generation, which regions are mostly garbage and it will collect the region from those regions first.
+  - Note: Named G1 for the garbage first collector.
+  - If a region contains only unreferenced objects then that's a complete garbage region and can be fully cleared and made available.
+  - Doing a garbage collection on the entire region is not necessary.
+    - Can still do a full garbage collection on the entire old generation if it is needed but hopefully that will be a rare occurrence.
+- G1 should generally be better than the other type of garbage collector that we've been looking at.
+  - Because when it needs to do a major collection, it can often do just a part of a major collection to free up enough memory.
+  - And it has the ability to resize and reallocate different areas of the heap to different parts of the young and old generation, again to maximise performance.
 
 ## Tuning the G1 garbage collector
+- Not required in most circumstances
+  - Always a niche case
+- `XX:ConcGCThreads=n` - number of concurrent threads available for the smaller regional collections, could consider the serial collector as well
+- `-XX:InitiatingHeapOccupancyPercent=n`- Garbage collection process begins when the heap reaches a certain level of fullness.
+  - By default, this is 45%
+  - Unlike previous garbage collection processes which run either when Eden is full or if the survivor spaces are full, or if the old generation is full, G1 run when the heap is only 45% full.
+  - Use flag to change. Experiment if trying to squeeze maximum performance.
 
 ## String de-duplication
+- Needs G1 garbage collector and a flag set.
+  - With this feature enabled, it allows the garbage collector to make more space if it finds duplicate string in the heap.
+  - When this flag is on
+    - Suppose there are two references to different string on the heap. They are not in the string pool, and they are not eligible for garbage collection because they have active references from the stack.
+    - When the garbage collection runs and this feature is on; the GC will compare each of the strings.
+      - If it finds that two strings have the same value, it will change the references to point to the same value
+      - In turn this makes the second object immediately available for garbage collection.
+        - This feature is quite efficient because it makes use of the string hashcode and compares them. This can be done reasonably quickly.
+        - This is an extra process that incurs an extra overhead.
+        - Useful if you know you are going to have a lot of duplicated strings and these string values will be objects and they will live for a long time.  i.e not garbage collected early.
+          - Also, worth considering if the code is in a memory constrained environment.
 
 ---
 
