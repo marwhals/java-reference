@@ -664,16 +664,28 @@ Note: Both are available from Java 8, in Java 9 default is mark sweep and in Jav
 # Assessing Performance
 
 ## Why bench marking isn't straight forward
+- Use case: May have two implementations and we don't know which one is better
+  - Focusing on a particular segment of code i,e microbench marking.
+    - Not as basic as timing before and after due to Java compiler performing behind the scenes work like native compilation, garbage collection
+    - Interested in running the code in isolation. Consider threads and hardware.
+    - For thought. Code being run 1000s times a second may justify this approach.
 
 ## Setting up the code for benchmarking
+- Insert "quick and dirty" example
 
 ## A simple approach to micro-benchmarking
+- Track start and end time and subtract.....relatively crude.
 
 ## Adding in a warm-up period
+- Trigger native compilation before running. Run the method a few times before testing
+  - Then do the timing
 
 ## Comparing two code alternatives
+- See / generate example
+
 
 ## Using Macro-benchmarking
+- Bench marking the code in the context of the entire system. Measurement is subjective
 
 ---
 
