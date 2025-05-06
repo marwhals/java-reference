@@ -791,6 +791,110 @@ Note: Both are available from Java 8, in Java 9 default is mark sweep and in Jav
 
 # How Maps Work
 
+## How Hashmaps Work - part 1
+- Key, Value pair data structure
+  - Retrieval takes the same time regardless of the size of the Hashmaps
+- Created as an Array with an initial size of 16 elements
+- Key can be any kind of object - java will convert this into an integer value unless it is an integer already
+  - Value can also be any kind of object
+  - Integer calculation on the key is the modulus of the hash i.e 124 / 16 = 12 mod 16
+    - Key 124 would get stored in bucket number 12
+    - 
+
+## The role of the Hashcode
+- Non integer? Every object in Java has a hascode and is iniherited from java.lang.object. Can just call hashCode method on the String.
+
+## How Hashmaps Work - Part 2
+- Each bucket contains a linked list of objects, new items go at the end
+  - Can see source code for this
+  - Can't have duplicate keys but you can have the same hash
+- Hashmaps can grow over time.
+  - once 3/4 of the buckets have items in them then the hashmap is resized. It will double in size.
+    - When this happens all the exising items will need to be re-evaluated.
+    - mod 16 becomes mod 32
+    - This will create a significant performance overhead
+
+## Specifying the initial size and factor of a HashMap
+
+- HashMap<String, Integer> hashMap = new HashMap<>(30, 0.5f);
+- The size of a hashmap will always be a power of two. Here it would be 32
+  - Care should be taken to not over reserve
+
+## HashMap performance
+- Arrays are contiguous memory
+  - bigger initial size and larger fill factor will speed up adding items.
+  - When retrieving we want it to be as big as possible because we want the number of elements inside a bucket to be as small as possible.
+
+## The rules for Hashcode for objets
+- Need to take care the same hashcode is not returned when using objects. Leads to a single linked list in the empty array.
+  - Need to make sure the hashcode function provides good hashcodes
+- The rules:
+  - Hashcode should lead to a good range of numbers
+  - Equal objects must have equal hashcodes
+
+## Generating and optimising the Hashcode method
+- Can generate using an IDE
+
+### Advice on Hashcodes AI assistant generated
+
+When working with hashcodes in Java, it is crucial to design the `hashCode()` method correctly to ensure optimal
+performance and correctness. Here is some advice:
+
+- **Consistency with `equals()`**: If two objects are considered equal according to their `equals()` method, they must
+  have the same hashcode. Failing this breaks the contract required for proper behavior in hash-based collections like
+  `HashMap` and `HashSet`.
+
+- **Wide Distribution**: A good `hashCode()` implementation should aim to produce a wide and evenly distributed range of
+  hashcode values, reducing the likelihood of collisions. Collisions can degrade performance by increasing the length of
+  the linked lists in hash buckets.
+
+- **Avoid depending on mutable fields**: If mutable fields are used in calculating the hashcode and these fields change
+  after the object is inserted into a hash-based collection, it can make the object unretrievable.
+
+- **Use Prime Numbers**: Leverage prime numbers in your calculations to minimize collisions. For example, the
+  `Objects.hash()` utility can simplify creating a hashcode that incorporates multiple fields effectively.
+
+- **Avoid Overriding Without Necessity**: If an object's natural identity (e.g., memory address) suffices, you don't
+  need to override `hashCode()` from `Object`. Do so only if your use case involves equality checks that logically
+  depend on the object's content.
+
+- **Leverage IDE Tools**: Modern IDEs can auto-generate `hashCode()` implementations based on selected fields. Use these
+  tools to avoid common pitfalls and ensure consistency with the `equals()` method.
+
+Here is an example of a simple, effective `hashCode()` implementation:
+
+```java
+@Override
+public int hashCode() {
+    return Objects.hash(field1, field2, field3);
+}
+```
+
+For complex objects, you can further optimize the hash function by using custom logic, but always ensure it follows the
+basic contract rules.
+
+Remember, a well-designed `hashCode()` method leads to a significant performance boost for operations in collections
+like `HashMap`, `HashSet`, etc., especially as the data size grows.
+
+## Optimising Hashmap Performance
+- Do research if necessary 
+
+## How the LinkedHashMap works
+- The difference is that in a LinkedHashMap - items iterate in a defined order. The order is preserved.
+  - Retrieval time is identical
+  - If order is important use a Linked Hash map
+    - Takes up a little more memory
+    - Order preservation is preserved using a doubly linked list (can be considered a separate linkedlist just for order).
+
+## The HashTable and TreeMap
+- HashTable is an older threadsafe version of the HashMap
+  - May be worth comparing this to a HashMap with Synchronisation blocks
+  - Benchmark use case
+- TreeMap
+  - Rather than objects being store with their order, they are store in order of their keys.
+  - They give worse performance than hash maps or linked hash maps
+  - Retrieving data with them can be quite slow, only really good with small amounts of data and when natural ordering is required.
+
 ---
 
 # Other Coding Choices
