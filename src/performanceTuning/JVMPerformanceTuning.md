@@ -1,6 +1,8 @@
 # Java Performance tuning notes taken from https://www.udemy.com/course/java-application-performance-and-memory-management
 
-These notes are to provide a starting point for more advanced topics relating to the JVM
+These notes are to provide a starting point for more advanced topics relating to the JVM.
+
+🧂*Will require updating for more recent java. Principles remain the same*
 
 ---
 
@@ -711,9 +713,81 @@ Note: Both are available from Java 8, in Java 9 default is mark sweep and in Jav
 
 ## Importance
 
+- Different data structures perform differently with the same workload
+
 ## The 8 different list implementations
+- The list interface........note: the three with comments do not allow for generics:
+  - ArrayList
+  - CopyOnWriteArrayList
+  - LinkedList
+  - AttributeList // niche case. Child of the ArrayList
+  - RoleList // niche to do with role objects
+  - RoleUnresolvedList // niche to do with role objects
+  - Stack
+  - Vector
 
 ---
+
+### The CopyOnWriteArrayList
+
+- This data structure is costly when used for mutations. Better suited to traversals i.e iterating and retrieving for the list.
+- Changes will cause a copy of the list. This is very bad for the heap.
+- Consider using it when:
+  - Writing a Multi-Threaded application
+  - Multiple threads accessing the same list
+  - Lots of iterations / reads
+  - Few writes / addition / deletions
+
+### The ArrayList
+- Backed by a finite array. Default size in 10
+  - Exceed capacity then a new copy is created and references from the old one are copied over
+  - Old arraylist is discarded. Only references are stored in this.
+    - Each time an ArrayList grows it grows by half of its current size. Can check source code for this.
+  - Resizing can lead to inefficiency and more objects that require garbage collection.
+
+### Specifying the initial size of an ArrayList
+- Max size is the (largest integer in Java - 8)
+  - Ideally put in a number large enough so that it can the number of object references.
+    - Will save resizing performance hit and garbage collection
+    - Overdoing it will result in wasted memory
+
+### The Vector
+- Left from Java 1.0
+  - There for backwards compatibility
+  - It is also threadsafe array list.
+    - This comes at a performance cost.
+
+### The Stack
+- Child object of the vector
+  - Queue and Dequeue exist
+  - Generally not used but still there
+  - Generally use LinkedLists
+
+### The LinkedList
+- See general LinkedList description
+
+### Choosing the optimal list type
+- Scenarios
+  - New item at the end? Use a LinkedList or an ArrayList (performance issue if capacity is reached).
+    - Getting to the end of a linked list is fast $O(n)$
+  - New item at the start? Use a LinkedList, ArrayList will require shuffling to make space.
+  - Deleting - ArrayList will need to shuffle** linkedList need to reassign pointers.
+    - ArrayList can find element in O(1) linkedList needs to be traversed.
+
+| **Feature**             | **ArrayList**                                                              | **LinkedList**                                                                             |
+|-------------------------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| **Implementation**      | Uses a dynamic array to store elements.                                    | Uses a doubly linked list to store elements.                                               |
+| **Access Time**         | O(1) for direct access using an index.                                     | O(n) for access, as traversal is needed to reach the desired element.                      |
+| **Insertion (End)**     | O(1) if there is capacity; O(n) when resizing is necessary.                | O(1) for insertion at the end/head.                                                        |
+| **Insertion (Middle)**  | O(n) as elements are shifted to create space.                              | O(n) due to traversal, but no shifting of elements.                                        |
+| **Deletion**            | O(n) as elements are shifted to fill the gap after removal.                | O(n) due to traversal, but involves only pointer reassignment.                             |
+| **Memory Usage**        | Better memory utilization due to array backing.                            | Requires more memory because of the storage of pointers.                                   |
+| **Iterating**           | Fast iteration over elements.                                              | Iteration can be slower compared to ArrayList.                                             |
+| **Thread-Safety**       | Not thread-safe without external synchronization.                          | Not thread-safe without external synchronization.                                          |
+| **Use Case Preference** | Preferred when frequent accessing and modification at the end is required. | Preferred when frequent insertions or deletions from the middle or beginning are required. |
+
+### Sorting Lists
+- LinkedList uses inherited sorting method form list interface via arrays.
 
 # How Maps Work
 
