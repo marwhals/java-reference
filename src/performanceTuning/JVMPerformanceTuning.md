@@ -324,15 +324,177 @@ Three parts: Stack, Heap and Metaspace
 # Generational Garbage Collection
 
 ## How the garbage collector works out what is garbage
+- Garbage collector needs to be efficient, use resources from CPU
+  - More efficient garbage collection means less impact on application performance
+- General principle
+  - Rather than look for objects to remove, the garbage collector looks for all the objects that need to be retained and rescues them.
+  - General algorithm is called mark and sweep. It is a two stage process. Marking and Sweeping.
+    - The program execution is first paused and is called a "Stop the world event"
+    - Marking cannot work properly if there are still threads executing....
+      - *So all the threads in the application are paused*
+      - The garbage collection then checks every live reference. This is easy to do.
+        - Simply looks at every variable on the stack and in the meta space.
+        - If there are static variables, it follows the reference, the object that it finds are marked as alive. (Tree traversal?)
+      - Once all these objects are marked for keeping, a full scan of the heap can take place and memory occupied by the objects that have not been marked during the marking phase can then be freed up.
+      - *Finally,* the objects that are being kept are moved into a single contiguous block of memory.
+        - This stops the heap from becoming fragmented over time and makes it easier and quicker for the virtual machine to find an allocate memory to future objects.
+        - It actually collects the objects which are not eligible for garbage collection and saves them.
+        - *This actually mean that's the garbage collection process is faster, the more garbage there is*
+          - If everything in the heap was garbage the garbage collection would be pretty much instantaneous.
+            - Marking phase would take no time at all, since there would be little to mark and thus nothing to retain.
+              - Most of the heap will be disposed of.
 
 ## Why the heap is divided into generations
+- Issue is a "stop the world event". The application is paused while the marking phase runs.
+  - Users will notice that our application has frozen for a few seconds and in some use cases that will not be acceptable.
+  - This is avoided using generational garbage collection.
+  - Understand that most objects in Java live for a very short period of time.
+    - If an object survives one garbage collection, then it is more than likely to live forever.
+    - *It's faster to run the garbage collection when there's a lost of garbage or when there's only a few objects that are going to survive*
+    - To make this process as efficient as possible the heap is actually organised into separate sections. This is known as generational garbage collection.
+  - Heap is divided into two sections.
+    - One is called the young generation and another is called the old generation.
+    - New objects are created in the young generation. The young generation space is quite small and will up quite quickly.
+      - When its full, a garbage collection takes place but only on the young generation because most object don't survive for long.
+      - The young generation, which is full of new objects is probably mostly garbage.
+        - The process to garbage collect the young generation should be very quick.
+        - There are very few object which need to be marked and its small anyway so it should take fractions of a second.
+          - 🧨 Application will freeze while this takes place.
+        - Any surviving objects are then moved to the old generation.
+        - The young generation is no empty and any new objects can again get added to the young generation.
+        - The young generation is now empty and any new objects can again get added to the young generation.
+        - The garbage collection of the young generation is known as a minor collection.
+          - As the application runs, there will be lots of minor garbage collections taking place, and they'll be quite small and mostly full of garbage.
+        - Most of the time garbage collection doesn't look at the entire heap, only a small section of it
+      - The old generation
+        - Garbage collection will run on the older generation but only if it is needed.
+        - This is called a major collection.
+          - 🧨 It is a lot slower since the block of memory to sweep is larger.
+        - The compacting process is also time-consuming
+- This could take ?seconds? for a major garbage collection or factions of a second for minor garbage collections.
+- Essentially, there are a lot of garbage collections on the young generations, but it can also be done on the large generations if it is needed.
+- Theoretically minor garbage collections will have no noticeable impact.
 
-## The internals of the Young Generation
+## The internals of the Young Generation (Java 8)
+- Split into three generations, Eden, s0 and s1.
+  - When an object is created it is placed in the Eden space
+  - Eden space is small. First GC cycle will happen quickly. Survivors will go to s0
+  - The next time the garbage collections runs it will look at everything in the Eden space and s0
+  - *All* survivors move to s1. Eden and s0 are empty again.
+  - Next time it runs all survivors will move to s0 from s1 along with Eden.
+    - s1 and s0 take alternating turns in holding surviving objects
+- Every time the marking structure is done we are not actually looking at the entire young generation, we are looking at two thirds of it.
+  - Either looking at Eden and s0 or s1
+  - Slightly more efficient since we have a smaller space to consider
+    - We will then have lots of garbage collections that will be extremely quick,
+- Eden space is small, its a small space to sweep and most of it will be discarded as objects live for a very small-time.
+- The process of compacting, i.e moving all the surviving objects into contiguous area of memory is very quick because we have an area of memory reserved just for either s1 or s0. (which ever is not being currently used)
+- Negative impact
+  - s1 or s0 will always be empty, so there will be a small amount of memory that is unused but it can be seen as a minor tradeoff.
+    - Example 50MB heap - 46Heap used 4 remains. This 4 is an empty survivor space.
+- *Each time an object moves from s0 to s1 and vice versa it can be considered as being one generation older*
+  - i.e surviving 5 garbage collections means it has survived give garbage collections.
+- *The threshold for this is configurable*
+  - Once this threshold has been hit, it will move into the old generation.
+- 🧨 Once the old generation is full a **major garbage collection** will take place and this is a much slower process.
+- 
+
+```mermaid
+graph TD
+subgraph Heap
+A(Eden - Young Generation) --> B(Survivor Space 0 - Young Generation)
+A --> C(Survivor Space 1 - Young Generation)
+B --> D(Old Generation)
+C --> D(Old Generation)
+end
+
+    %% Descriptions
+    A -- Objects move here at creation --> A
+    A -- After Minor GC, surviving objects --> B
+    A -- After Minor GC, surviving objects --> C
+    B -- After more GC cycles, surviving objects --> D
+    C -- After more GC cycles, surviving objects --> D
+    D -- Long-lived objects remain here --> D
+```
+
+405:⁉⁉⁉⁉
+
+## Notes on Modern Java Garbage Collection (GPT-Generated) 
+
+### The Garbage Collector in Modern Java Versions (Java 9+)
+
+#### Introduction to New Garbage Collectors
+
+- Recent Java versions have introduced several new garbage collectors to improve application performance, scalability,
+  and responsiveness. These include:
+  - **G1 Garbage Collector (default since Java 9)**: Focuses on predictable pause times.
+  - **Z Garbage Collector (introduced in Java 11)**: Designed for low-latency applications, with minimal pause times.
+  - **Shenandoah Garbage Collector (introduced in Java 12)**: Focuses on reducing pause times by concurrent compacting.
+  - **Epsilon Garbage Collector (introduced in Java 11)**: A no-op garbage collector for performance testing, where no
+    memory reclamation is performed.
+
+#### Key Features of G1 Garbage Collector
+
+- **Region-based Heap Layout**:
+  - Divides the heap into fixed-size regions instead of generational divisions (like young and old generations).
+  - Each region can serve as Eden, Survivor, or Old space.
+- **Concurrent Marking**:
+  - Performs most of the marking phase concurrently, reducing pause times.
+- **Evacuation Process**:
+  - Moves live objects to a new region, compacting memory without full pauses.
+- **Predictable Pause Times**:
+  - Allows configuration of pause time goals using `-XX:MaxGCPauseMillis`.
+
+#### Z Garbage Collector
+
+- **Characteristics**:
+  - Wide platform support since Java 15.
+  - Extremely short pause times (<10 ms) regardless of heap size.
+  - Supports heaps from small sizes up to 16 TB.
+- **Key Features**:
+  - Performs all heavy operations (marking and relocation) concurrently with application threads.
+  - Low-latency design suitable for responsive systems.
+- **Configuration**:
+  - `-XX:+UseZGC` to enable ZGC.
+  - Additional tuning options like `-XX:SoftMaxHeapSize` for heap over-allocation management.
+
+#### Shenandoah Garbage Collector
+
+- **Characteristics**:
+  - Concurrent Compaction: Moves objects while the application runs, reducing the "stop-the-world" event duration.
+  - Designed primarily for low-latency requirements.
+- **Configuration**:
+  - Enabled using `-XX:+UseShenandoahGC`.
+
+#### Improvements in Generational Garbage Collection
+
+- Modern garbage collectors like G1 still use generational GC for short-lived and long-lived objects. Key enhancements
+  include:
+  - Better management of young and old regions in G1.
+  - Faster promotion of long-lived objects in ZGC and Shenandoah.
+
+#### Epsilon Garbage Collector
+
+- **Purpose**:
+  - Designed for workloads where GC performance isn't critical, and memory is managed manually.
+- **Use Cases**:
+  - Performance testing and benchmarking.
+- **Configuration**:
+  - Enable with `-XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC`.
+
+#### Summary of GC Selection in Modern Java
+
+- Use **G1** for general-purpose applications with predictable pause times.
+- Use **ZGC** for ultra-low latency workloads with large heaps.
+- Use **Shenandoah** for applications requiring consistent responsiveness.
+- Use **Epsilon** for testing scenarios where memory reclamation is unnecessary.
 
 ## Viewing the generations in VisualVM
+- Use visualVM to see some graphs / data on Java Processes.
+  - Add appropriate plugins
 
 ## Viewing the heap when there's a soft leak
-
+- 🧨🧨🧨🧨🧨 the graph will plateau. Old generation wil fill up and the GC will not be able to remove anything. Application has effectively stopped.
 ---
 
 # Garbage Collector tuning and selection
