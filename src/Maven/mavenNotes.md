@@ -327,3 +327,54 @@ INSERT LINK to rebel labs cheat sheets
   - TestNG
 
 [//]: # (*TODO Research coding coverage with JaCoCo*)
+
+---
+
+## Multi-Module Projects
+
+*Standard in enterprise projects*
+
+[//]: # (TODO insert diagram)
+
+### Maven Reactor
+- Known simply as 'The Reactor'
+- The reactor is what builds each module if the Maven project
+- The reactor collects the modules to build
+- The reactor will then run selected build lifecycles against each module
+- The reactor will determine the build order of the modules
+- By default The Reactor will build modules sequentially
+  - Optionally can use threads to build modules in parallel
+
+### Reactor Build Order
+- Factors determining the build order used by Reactor:
+  - Project dependencies - modules use by other modules in the project
+  - Plugin declaration - i.e if module is a plugin used by other modules
+  - Order of modules declared in 'modules' section of POM
+
+### Multi-Module Code Smells
+- Try to use modules only when needed
+- Do not over-use modules
+  - Multiple modules will slow down your build
+- Code Smells with Modules
+  - One class or interface in a module
+  - Many small modules which could be combined
+
+### Maven BOM
+- BOM - Bill of Material
+  - Manufacturing term meaning effectively a recipe of components required to produce a widget
+- In Maven terminology, a BOM has become to mean dependencies declared within the dependencyMangement section of the POM
+- Full qualified dependencies are listed under the dependencyManagement section of the POM
+- Dependencies declared under the dependencies section of the POM inherit from dependencyManagement (version / packaging)
+- Typically used to standardised versions
+
+### Transitive Dependencies and BOM
+- Any dependencies declared in the dependencyManagement section of the POM DO NOT become transitive dependencies for the artifact
+- Dependencies declared under the dependencies section of the POM DO become transitive dependencies for the artifact
+  - These DO inherit attributes such as version from dependencyMangement
+
+### BOM Approaches
+- Typical is to declare a dependencyMangement in the parent POM of the project
+- Can also be defined in a remote parent POM
+  - Spring Boot uses this approach
+- Can be defined as a standalone POM, then "imported" into the dependenciesManagement section
+  - Spring Cloud uses this approach
