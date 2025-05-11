@@ -378,3 +378,12 @@ INSERT LINK to rebel labs cheat sheets
   - Spring Boot uses this approach
 - Can be defined as a standalone POM, then "imported" into the dependenciesManagement section
   - Spring Cloud uses this approach
+
+---
+
+## Apache Maven for Spring Boot
+
+[//]: # (TODO - add more details to the diagram)
+
+Your Spring Boot Project ----> Spring Boot Starter Parent ----> Spring Boot Dependencies -----> Spring Boot Build ------> Maven Super POM
+
