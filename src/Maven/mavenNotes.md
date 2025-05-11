@@ -307,3 +307,11 @@ Maven Site Plugin
 INSERT LINK to rebel labs cheat sheets 
 
 ---
+
+## Overview of Alternate JVM Languages with Maven
+
+- Most major alternate JVM languages can be compiled to Java byte code with Maven
+- Typically done via plugins hooking into the 'compile' phase
+- Each JVM flavor is a little different in terms of capabilities
+- Most can be compiled with Java in the same project
+- More than 2 languages in one project is generally not a good idea, nor supported 👀
