@@ -244,3 +244,66 @@ Project -> Local in /.m2 -> Central / Others /// TODO turn into mermaid diagram
   - i.e - J2EE
 
 ---
+
+## Common Maven Plugins
+
+### Overview Maven Lifecycle Plugins
+
+Maven clean plugin
+- Build Lifecycle - CLEAN
+- Has only one goal - 'clean'
+- Purpose is to remove files generated during the build process.
+- By default, removes / target directory project root and submodule folders
+
+Maven Compiler Plugin
+- Build Lifecycle - DEFAULT
+- Has two goals - compiler:compile,  compiler:testCompile
+- By Default uses the compiler 'javax.tools.JavaCompiler'
+  - Can be configured to use javac if needed
+- Default source and target language levels are Java 1.6
+  - Apache team encourages these values to be set
+
+Maven Resource Plugin
+- Build Lifecycle - DEFAULT
+- Has 3 goals - resource:resources, resources: testResources, resources:copy-resources
+- Purpose is to copy project resources to output directory (target dir)
+- Can be configured for encoding, source and target directories
+- Rather versatile configuration option for copying files during build processing
+
+Maven Surefire Plugin
+- Build Lifecycle - DEFAULT
+- Has one goal: surefire:test
+- The Surefire plugin is used to execute unit test of the project
+- By default, supports JUnit 3, JUnit 4, JUnit 5 and TestNG
+  - Cucumber runs under JUnit, Spock compiles to JUnit byte code
+- By default, includes classes named
+  - **/Test*.java; **/*Test.java; **/*Test.java; **/*TestCase.java
+
+Maven jar plugin
+- Build Lifecycle - DEFAULT
+- Has two goals: jar:jar, jar:test-jar
+- Purpose is to build jars from compiled artifacts and project resources
+- Can be configured for custom manifests and to make executable jars.
+
+Maven Deploy Plugin
+- Build Lifecycle - DEFAULT
+- Has two goals - deploy:deploy , deploy:deploy-file
+- Purpose is to deploy project artifacts to remote Maven repositories
+- Often done in CI
+- Configuration is typically part of the Maven POM
+
+Maven Site Plugin
+- Build Lifecycle - SITE
+- Has 7 goals:
+  - site:site - Generate site for project
+  - site:deploy - Deploy site via Wagon
+  - site:run - Run Site locally using Jetty as web server
+  - site:stage - generate site to a local staging directory
+  - site:stage-deploy - Deploy site to remote staging location
+  - site:attach-descriptor - adds site.xml (site map file used by search engines) to files for deployment
+  - site:jar - bundles site into a jar for deployment to a repository
+  - site:effective-site - generates the site.xml file
+
+INSERT LINK to rebel labs cheat sheets 
+
+---
