@@ -497,3 +497,168 @@ Spring Framework
 ### Oracle Maven Repository
 - Requires authentication
 - See setup tutorial
+
+---
+
+## Deploying to package cloud
+
+---
+
+## Deploying to Apache Maven projects to Nexus
+
+---
+
+## Maven Build Profiles
+
+### Maven Build Profiles
+
+- Maven Build Profiles allow you to specify a set of build configuration values
+- Values you can specify are largely the same data elements found in the POM
+- Values set in build profiles:
+  - Can be in addition to what is in the project POM
+  - OR used to override POM values
+- More than one profile can be set to active at a time
+- Caution: No priority is available for multiple active profiles
+  - Duplicate Property resolution is random
+
+Why Use Build Profiles?
+- Build Profiles are a very powerful feature which allows you to shape the behaviour of your build
+- Build Behaviour can be changed
+  - Based on your desired outcome of the build
+  - Automatically based on the run time environment
+  - Automatically to adapt to different operating systems
+  - To optionally activate specific plugins
+  - To provide alternative build time configuration values
+
+Declaring Build Profiles
+- Per Project
+  - Defined in pom.xml
+  - Command Line - mvn package -S <path to settings file>
+- Per User
+  - Defined in <user home>/.m2/settings.xml
+- Global
+  - Defined in <Maven Home>/conf/settings.xml
+- Profile Descriptor
+  - Defined in profiles.xml
+  - Not supported by Maven 3.0
+  - profiles.xml will not be covered in this course
+  - Documentation is available in the archive section on the Apache Maven website
+
+Which Declaration Method to Use?
+- Use Project POM when:
+  - Your build needs to be portable to other computers (CI servers, other developers)
+  - When others may or may not need build features
+- Use Setting.xml when:
+  - You want the profile available to many projects
+  - Frequently used for configuration of repository managers
+  - Protection of secrets
+  - Environment Config values
+
+Combo of Declaration Methods?
+- Not recommended
+
+Activating Build Profiles
+- In the profile configuration under activation attribute:
+  - setting activeByDefault property to true
+  - default activation for OS, JDK versions
+  - existence of system properties
+  - specific values of system properties
+  - missing files (i.e build artifact not in target dir)
+- Command line : mvn package -P <pofile-1>,<profile-2>
+- In settings.xml file - activeProfiles section
+
+Deactivating Profiles
+- Profiles can be deactivated from the command line:
+  - mvn package -P !<profile-1>, !<profile-2>
+  - mvn package -P -<profile-1>,-<profile-2>
+
+POM Elements in Profiles
+
+[//]: # (TODO add list)
+
+### View Active Profiles
+- Command `mvn help:active-profiles`
+- Note should be used with relevant CLI options
+  - `mvn help:active-profiles -P <profile-1>`
+    - would show profile-1 active
+
+---
+
+## Maven Release Plugin
+
+### Maven Release Process Overview
+- The Maven Release Plugin can be used to release versions of your project
+- High level release process:
+  - Version 1.0.0-SNAPSHOT
+  - Version 1.0.0
+  - Version 1.0.1-SNAPSHOT
+
+### Release Considerations
+- Snapshots are considered development versionsa and source changes are not closely tracked
+- Releases however are formal releases of software projects
+  - Source code should be tracked
+  - Auditors in some industries will require source code of a release to be tracked
+  - You should be able to re-create the released artifact from your SCM
+  - Best practice is to tag SCM with release
+    - Allows you to definitively know what is in the `release`
+
+### Maven Release Plugin Goals
+
+[//]: # (TODO - go into details later)
+
+- Prepare Release
+  - ........
+- Perform Release
+  - ..........
+
+Release Rollback
+- Typically used if errors have occurred in release:prepare goal
+  - Will revert POMs back to pre-release state
+  - SCM Tag may be removed
+    - Tag removal is not fully implemented (depends on SCM)
+    - SourceTree is a handy tool for GIT
+  - Will not work if goal release:clean has been run
+
+CLean Release
+- Cleans up release files
+  - removes release.properties
+  - removes any backup POMs
+- Normally removed with release:perform
+
+Update POM Versions
+- Goal can be used to update POM versions in multi-model projects
+- Handy tool if default release process does not meet your needs
+- Not shown in course
+  - `command: mvn release:update-versions -DautoVersionSubmodules=true`
+
+### SCM Configuration
+- Maven SCM Plugin
+  - SCM - Software Configuration Management or Source Control Management
+  - Under the covers, the Maven Release Plugin - is using the Maven SCM Plugin to interact with the project's SCM
+  - The Maven SCM Plugin supports most major SCMs
+  - The Maven SCM Plugin Supports: Git, CVS, Subversion, TFS, Mercurial, Perforce and others.
+  - Exact abilities vary by SCM
+
+### SCM Configuration
+- The SCM is defined in the SCM section of the POM
+- The 'connection' elements defines the read URL
+- The 'developerConnection' element defines the write url
+- The URL is prefixed with 'scm:[scm-provider]:[SCM URL]'
+- The tag element defines the tag project is under (default to HEAD)
+- The url element defines the public repository URL
+
+### Git Hub Authentication
+.....
+
+
+
+---
+
+## Maven in the Real World
+
+---
+
+## Enterprise Dependency Management
+
+---
+
