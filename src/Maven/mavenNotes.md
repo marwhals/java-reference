@@ -387,3 +387,113 @@ INSERT LINK to rebel labs cheat sheets
 
 Your Spring Boot Project ----> Spring Boot Starter Parent ----> Spring Boot Dependencies -----> Spring Boot Build ------> Maven Super POM
 
+---
+
+## Maven Repositories
+
+### Configuration of Maven Repositories
+
+Maven Repositories Search Order
+- When resolving an artifact, Maven will:
+  - First: Check in the local repository (aka cache) located under <user home>/.m2/repository/
+  - Next: Maven Central
+  - Next: any additional repositories configured
+- Search order of additional repositories
+  - Typically not important
+  - Is Alphabetical by repository id value
+
+Repository Mirrors
+- Mirrors are used to override project defined repository values
+- Mirrors are configured in settings.xml
+  - Default location is in <user home>/.m2 directory
+- A mirror will override the URL of the repository
+- Can be used to improve performance by directing to regional servers
+- Or to redirect to internal repository manager
+- Values set in settings.xml will apply to all Maven project executed on system
+
+Defining Additional Remote Repositories
+- Repositories can be defined in the repositories element of the POM, or in the repositories element in the settings.xml file
+  - POM definitions will be specific to the Maven project
+  - settings.xml definitions are system-wide
+
+Repository Element
+- id - unique value required
+- name - human-readable name
+- url - URL for repository
+- layout - legacy or default (Default is generally used)
+- releases - Repository Policy for handling downloading of releases
+- snapshots - Repository Policy for handling downloading of snapshots
+
+Repository Policy
+- Used for release and snapshot elements of Repository definitions
+- enabled - true / false
+- updatePolicy - always, daily (default), interval:XXX (xxx in minutes), never
+- checksumPolicy - What to do if verification of artifact fails
+  - values: ignore, fail, warn
+
+### Common Public Maven Repositories
+
+Maven Central
+- Established in 2002, considered the 'grand-daddy' 🤣 of Maven repositories
+- Default repository use by Apache Maven, sbt and others.
+- 3.3M indexed jars
+- [URL] : http://central.maven.org/maven2/
+
+Sonatype
+- Sonatype - Staging Repository used to publish artifacts to Maven Central
+- Hosted by company sonatype
+- Typically not used directly
+- 2M+ Indexed JARs
+- [URL]
+
+JCenter
+- Has Maven Central Artifacts and more
+- Default for Android Studio and Gradle
+- Has support for HTTPS
+- Uses different CDN that Maven Central. May be more performant in different countries
+  - Depends on geo-location of location
+- [URL] : https://jcenter.bintry.com/
+
+JBoss
+- Artifacts for the JBoss community
+- Has repositories for releases, third party releases and snapshotes
+- URL: https://repository.jboss.org/nexus/content/repositories/releases/
+
+Atlassian
+.....Artifacts for Atlassian Plugin Developers
+
+Oracle
+....
+
+Spring Framework
+- Hosted by Pivotal, the company supporting the Spring Framework
+- Provides Releases, Milestone Releases and Snapshots
+- Helpful for developing against leading edge versions of Spring Framework Components
+- Releases are also published to Maven Central
+- [URL] : https://repo.spring.io
+
+### Maven Settings
+
+- User Settings - kept in <user home>/.m2/setting.xml
+  - Can be overridden with command line parameter -s <path/ filename>
+  - Common to override in CI builds
+- Global Settings - Kept in Maven home /conf/settings.xml
+  - Applies to all users using Maven from that directory
+  - Can be overridden with command line parameter -gs <path /  filename>
+  - Rarely used, user settings typically used instead
+
+### Settings Elements
+- localRepository - Allows you to override the location of the local Maven repository
+- interactiveMode - Allows you to set interactive / batch mode. Defaults to interactive
+- usePluginRegistry - Maven 2.0 - no longer used in Maven 3.0
+- offline - defaults to false, if true Maven will not try to connect to remote repositories
+- pluginGroups - List plugin groups ids to allow abbreviated plugin goals
+- servers - element allows you to set user credentials for servers which Maven connects to
+- mirrors - Allow you to configure mirrors for repositories
+- proxies - Define network proxy information
+- profiles - Define build profiles
+- activeProfiles - define active build profiles
+
+### Oracle Maven Repository
+- Requires authentication
+- See setup tutorial
