@@ -315,3 +315,15 @@ INSERT LINK to rebel labs cheat sheets
 - Each JVM flavor is a little different in terms of capabilities
 - Most can be compiled with Java in the same project
 - More than 2 languages in one project is generally not a good idea, nor supported 👀
+
+## Testing with Maven
+
+### Overview of Testing with Maven
+- Unit Testing is completed by the Maven Surefire Plugin ⚡
+- Integration Testing is completed by the Maven Failsafe Plugin
+- Surefire / Failsafe support:
+  - POJO tests
+  - Junit version 3-5
+  - TestNG
+
+[//]: # (*TODO Research coding coverage with JaCoCo*)
