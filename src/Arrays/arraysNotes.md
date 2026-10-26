@@ -24,8 +24,8 @@
 
 - Square brackets are required when using the new keyword and a size is specified between them. So, in this example
   there will be 10 elements in the array.
-- An array instantiation doesn't have a set of parentheses, meaning we can't pass data to a constrcutor for an array.
-- Using parentheses with an array instantiation give yoiu a compiler error
+- An array instantiation doesn't have a set of parentheses, meaning we can't pass data to a constructor for an array.
+- Using parentheses with an array instantiation give you a compiler error
 
 ## An Array is NOT Resizable
 
@@ -54,8 +54,9 @@
 
 ### Array initialization and default element values
 
-- When an array initializer is not used, all array elements get initiliased to the default value for that type
-- For primitive types- zero for numeric types, boolean the default value will be false, class types will be `NULL`
+- When an array initializer is not used, all array elements get initialized to the default value for that type
+- For primitive types: zero for numeric types, boolean the default value will be false
+- Class types will be `NULL`
 
 ### The Enhanced For Loop, the For Each Loop
 
@@ -88,13 +89,13 @@
 - Java's array type is basic and has very little built in functionality
 - Has single property or field, named length
 - It inherits java.util.Objects functionality
-- Java provides a helper class named java.util.Array, providing the common functionlaity you would want for many
+- Java provides a helper class named java.util.Array, providing the common functionality you would want for many
   operations
 - These are static methods on Array, they are class methods, not instance methods.
 
-### Printing elemts in an array using Arrays.toString()
+### Printing elements in an array using Arrays.toString()
 
-- The toString method in this helper class prints out all the array elements, comma delimited and within square brakets
+- The toString method in this helper class prints out all the array elements, comma-delimited and within square brackets
 
 ### Why use arrays?
 
@@ -104,8 +105,8 @@
 ## Matching elements in an array
 
 - Searching sequentially - Linear Search, stepping through the elements one after another, if the elements are sorted
-  then this type of search is unnecessarily inefficient
-- Using intervals to Search - Split each section up, testing the values at the boudaries and based on that split again
+  then this type of search is unnecessarily inefficient.
+- Using intervals to Search - Split each section up, testing the values at the boundaries and based on that split again
   into smaller sections narrowing the number of elements to test each time
     - This type of searching is called interval searching
         - One of the most common ones is binary search. Intervals are continuosly split into two
@@ -122,9 +123,9 @@
     - The position oif a match, if found
     - It returns a -1 when no match was found
     - It's important to remember that a positive number may not be the position of the first match
-    - If you array has duplicate values and you need to find the first element, other methods should be used.
+    - If your array has duplicate values, and you need to find the first element, other methods should be used.
 
-## Refernce Types vs Value Types
+## Reference Types vs Value Types
 
 - When an object is assigned to a variable, that variable becomes a reference to that object.
     - This is also try of arrays
@@ -147,7 +148,7 @@ public static void main(String... args) {
 }
 ```
 
-There can only be one variable argument in a method and it must be the last argument
+There can only be one variable argument in a method, and it must be the last argument
 
 # Java's nested Arrays
 
@@ -186,11 +187,11 @@ int[][] array = new int[3][]; //Outer array specified only
 int[] number_array[];
 ```
 
-## Accessing elements in a muli-dimendional arrays
+## Accessing elements in a muli-dimensional arrays
 ```java
-array[0] = 50; // set this elmeent to 50
+array[0] = 50; // set this element to 50
 
-array[0][0] = 60; // first elmeent in first array to 50
+array[0][0] = 60; // first element in first array to 50
 
 array[1][1] = 10; // set to 10
 ```

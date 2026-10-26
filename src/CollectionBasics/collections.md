@@ -4,7 +4,7 @@
 
 - A collection is simply an object that represents a group of related objects
 - In general, the objects in a collection share some common relationship or purpose
-- In Computer Science, different types of collections have specific names and expected behaviours. These include arrays,
+- In Computer Science, different types of collections have specific names and expected behaviors. These include arrays,
   lists, vectors, sets, queues, tables, dictionaries and maps (key/ value pairs)
 - Strictly speaking, Arrays and Array utilities are not considered a part of this framework
 - All collection objects implement the Collection interface, except for maps.
@@ -12,7 +12,7 @@
 
 ## The Collection Interface
 
-- As with most in software hierarchies, it provides an abstract representation of the behaviours needed to manage a
+- As with most in software hierarchies, it provides an abstract representation of the behaviors needed to manage a
   group
   of objects.
 - This interface is often used when you want to pass collections around and manipulate them with maximum flexibility and
@@ -36,7 +36,7 @@
 # The Queue
 
 - A Queue is a collection designed for holding elements prior to processing. In other words, the processing order
-  matters, so the first and last positions or the head or tail are prioritised
+  matters, so the first and last positions or the head or tail are prioritized
 - These are often implemented as a FIFO, but can be implemented as a LIFO/ Stack
     - A Deque supports both
 
@@ -72,7 +72,7 @@
 ### Understanding the importance of the hash code
 
 - HashSet and HashMap are based on the hash codes of objects
-    - Sets are designed to ensure uniqueness by not allowing duplicates, adding an element rquries first checking it it
+    - Sets are designed to ensure uniqueness by not allowing duplicates, adding an element requires first checking it
       already exists in the set
     - For large sets, this check can become costly potentially taking $O(n)$ time, which is linear in relation to the
       size of the set.
@@ -93,7 +93,7 @@
       over which to distribute the objects
     - It then maps the wide range of possible hash codes into a more manageable range of bucket identifiers
     - Hashed implementations often combine the hash code with other techniques to create an efficient bucketing system
-      that aims to evenly distribute objects, thereby optimising performance
+      that aims to evenly distribute objects, thereby optimizing performance
 
 # Hashing in Java
 
@@ -104,7 +104,7 @@
       overrides this method, so that it compares all the characters in each String to confirm that two String are equal
 
 - Can also create your own hashCode method
-    1) It should very fast to computer
+    1) It should very fast to compute
     2) It should produce a consistent result each time it's called. For example, you wouldn't want to use a random
        number generator or a data time-based algorithm that would return a different value each time the method is
        called
@@ -113,9 +113,9 @@
 
 # Creating the hashCode method
 
-- When implementing the hashCode method, its common to use a small prime number as a multiplier. Prime numbers are
+- When implementing the hashCode method, it's common to use a small prime number as a multiplier. Prime numbers are
   preferred because they help spread out hash codes more evenly, reducing the chance that different objects will end up
-  with the same hash code, which is important in data strcutures like HashMap or HashSet
+  with the same hash code, which is important in data structures like HashMap or HashSet
 - Using a prime number as a multiplier is especially useful if your data might naturally cluster or follow patterns,
   which could otherwise lead to uneven distribution of hash codes.
   - Its bes to avoid small primes like 2,3,5 or 7 because many numbers are divisible by them which could lead to less
@@ -136,7 +136,7 @@
 - You can also check if a specific item is in the set using the contains method.
 - Interestingly enough, there's no way to retrieve an item from a set
   - You can check if something exists, using contains, and you can iterate over all the elements in the set but
-    attempting to get the 10th element for example from a set isn't possible with a single method
+    attempting to get the 10th element for example from a set isn't possible with a single method.
 
 # The HashSet class
 
@@ -168,9 +168,8 @@
 ### Ordered Sets
 
 - If you need an ordered set, you'll want to consider either the LinkedHashSet or the TreeSet
-- A LinkedHashSet maintain the insertion order of the elements
-- The TreeSet is a sorted collection, sorted by the natural order of the elements, or by specifying the required sort
-  during the creation of the set
+- A LinkedHashSet maintains the insertion order of the elements
+- The TreeSet is a sorted collection, sorted by the natural order of the elements, or by specifying the required sort during the creation of the set
 
 # The LinkedHashSet
 
@@ -187,7 +186,7 @@
     - binarySearch method on this kind of List is very fast if the elements are sorted
     - The search iteratively tests the mid-range of a group of elements to be searched, to quickly find its element in a
       collection
-    - As elements are added to a TreeSet, they're organised in the form of a tree where the top of the tree represents
+    - As elements are added to a TreeSet, they're organized in the form of a tree where the top of the tree represents
       the mid-point of the elements
         - Further binary divisions become nodes under that
         - The left node and its children are elements that are less than the parent node
@@ -324,7 +323,7 @@ This means changes to the Map are reflected in the Set and vice versa
 
 - The Map interface has the LinkedHashMap and TreeMap classes
 - The LinkedHashMap is a key value entry collection whose keys are ordered by the insertion order
-- The TreeMap is sorted by its keys, so a key needs to implement Comparable, or be intialised with specified Comparator
+- The TreeMap is sorted by its keys, so a key needs to implement Comparable, or be initialized with specified Comparator
 
 # TreeMap's View Collections
 
@@ -349,7 +348,7 @@ This means changes to the Map are reflected in the Set and vice versa
 
 # The EnumSet
 
-- The EnumSetr is a specialised Set implementation for use with enum values
+- The EnumSet is a specialised Set implementation for use with enum values
 - All of the elements in an EnumSet must come from a single enum type
 - The EnumSet is abstract meaning we can't instantiate it directly
 - It comes with many factory methods to create instances

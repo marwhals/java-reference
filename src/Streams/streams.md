@@ -1,24 +1,24 @@
-### Streams
+# Streams
 
-- Streams are a mechanism fo describing a while series of processes, before actually executing them
+- Streams are a mechanism fo describing a whole series of processes, before actually executing them.
 - Streams and collections are designed for different purposes
   - A collection is used to store and manage a series of elements in Java, providing direct access to the Collection
-    elements
-  - Can use collections to manipulate or query a set of data
+    elements.
+  - Can use collections to manipulate or query a set of data.
   - There is nothing you can do with a steam that, you couldn't do with a Collection
     - However, a stream was designed to manage the processing of elements
-    - Streams don't actually store elements, instead these elements are computed on demand, from a data providing
+    - Streams don't actually store elements, instead these elements are *computed on demand*, from a data providing
       source
   - Streams are lazy like lambda expressions variables
-  - When calling some methods on a stream, execution may no immediately occur
+  - When calling some methods on a stream, execution may not immediately occur.
   - Instead, you would need to invoke a special operations on the stream, like you would by calling a lambdas function
     method
-    - This "special operation" is called a terminal operation
+    - This "special operation" is called a terminal operation.
 - Why use streams?
-  - The make the code to process data uniform, concise and repeatable....similar to SQL
-  - When, working with large data collections, parallel streams will provide a performance advantage
+  - To make the code which processes data uniform, concise and repeatable....similar to SQL
+  - When working with large data collections, parallel streams will provide a performance advantage
 
-# Pipelines
+## Pipelines
 
 - The source of the stream is where the data elements are coming from
 - All pipelines start wia stream
@@ -31,11 +31,11 @@
 - Execution of the intermediate operations is dependent, first on a terminal operation being specified and second
   on an optimisation occurring
   - Stream pipeline is kind of a workflow suggestion
-    - Before th eprocess begins, the stream implementation will perform an evaluation, to optimised the means to the
+    - Before the process begins, the stream implementation will perform an evaluation, to optimise the means to the
       end
     - It will determine the best way to get the elements needed and the most efficient way to process to give the
       result that you have asked for
-    - The result will be consistent each time but the process to get there is not guaranteed to be
+    - The result will be consistent each time but the process to get there is not guaranteed to be consistent
     - Optimisation my change the order of the intermediate operations, it may combine operations or skip them
       altogether
       - It is very important to avoid side effects in your intermediate operations
